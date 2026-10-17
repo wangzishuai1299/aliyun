@@ -1,4 +1,4 @@
-﻿name: Deploy to Aliyun Server two 
+﻿name: Deploy to Aliyun Server 
 
 on:
   push:
