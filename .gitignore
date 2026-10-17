@@ -1,0 +1,25 @@
+# Python 虚拟环境
+venv/
+.venv/
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+
+# 环境变量及敏感信息
+.env
+.env.*
+!.env.example
+
+# 测试和代码检查缓存
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# 编辑器配置
+.vscode/
+.idea/
+
+# 系统文件
+.DS_Store
+Thumbs.db

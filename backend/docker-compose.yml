@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  fastapi-backend:
+    build: .
+    container_name: fastapi-admin
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./upload:/root/backend/upload
+      - ./excel:/root/backend/excel
+      - ./logs:/root/backend/logs
+    restart: always
+    network_mode: "host"

@@ -1,0 +1,43 @@
+﻿name: Deploy to Aliyun Server 
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, aliyun]
+    steps:
+      - name: 清理并拉取最新代码
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
+          cd /root/project
+          git reset --hard HEAD
+          git clean -fd -e 'backend/.env'
+          test -f /root/project/backend/.env || { echo "ERROR: backend/.env 丢失"; exit 1; }
+          git pull origin main
+          echo "=== 当前 commit ==="
+          git log -1 --oneline
+          echo "=== docker-compose-all.yml 校验 ==="
+          docker compose -f docker-compose-all.yml config
+
+      - name: 停止旧容器并释放端口
+        run: |
+          docker stop fastapi-admin  mariadb-admin 2>/dev/null || true
+          docker rm fastapi-admin  mariadb-admin 2>/dev/null || true
+
+      - name: 构建并启动全栈服务
+        run: |
+          cd /root/project
+          docker compose -f docker-compose-all.yml down 2>/dev/null || true
+          docker compose -f docker-compose-all.yml up -d --build
+
+      - name: 初始化测试数据
+        run: |
+          sleep 15
+
+      - name: 查看运行状态
+        run: |
+          docker ps
+          cd /root/project && docker compose -f docker-compose-all.yml logs --tail=30
