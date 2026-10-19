@@ -9,12 +9,13 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 class Base(DeclarativeBase):
     pass
 
-class Memo(Base):
-    __tablename__ = "memo"
+class Movie(Base):
+    __tablename__ = "movies"
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True,autoincrement=True)
-    title: Mapped[str] = mapped_column(String(50), index=True)
-    sort: Mapped[str] = mapped_column(String(50), index=True)
-    body: Mapped[str] = mapped_column(String(1000), index=True)
+    title: Mapped[str] = mapped_column(String(255), index=True)
+    sort : Mapped[str] = mapped_column(String(255), index=True)
+    star: Mapped[str] = mapped_column(String(255), index=True)
+    start_time : Mapped[str] = mapped_column(String(255), index=True)
 
 Base.metadata.create_all(bind=engine)
 
@@ -24,7 +25,10 @@ def get_db():
         yield db
     finally:
         db.close()
-    
+
+
+
+
     
 
     
